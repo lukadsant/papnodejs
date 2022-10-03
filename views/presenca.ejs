@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <title></title>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="text-center mt-3 mb-3"><%= title %></h1>
+            
+            <% if(action == 'add') { %>
+            <div class="mb-3">
+                <div class="imgz">
+                    <img src="http://localhost:3000/images/fpsiconvan.png" class="rounded mx-auto d-block" height="125" width="125" alt="zzz">
+                </div>
+            </div>
+            <div class="card">
+
+                <div class="card-header">Insersão de matricula</div>
+                <div class="card-body">
+                    <form method="POST" action="/presenca/add_sample_data">
+                        <div class="container">
+
+                                <div class="mb-3">
+                                    <label>Matrícula:</label>
+                                    <input type="number" name="first_name" id="first_name" class="form-control form-control-lg"/>
+                                </div>
+
+                        </div>
+
+
+                        <div class="container">
+
+                                <div class="mb-3">
+                                    <label>Turno:</label>
+                                    <select name="age" id="age" class="form-control form-control-lg">
+                                        <option value="Manhã">Turno da Manhã</option>
+                                        <option value="Tarde">Turno da Tarde</option>
+                                        <option value="Ambos">Ambos os Turnos</option>
+                                    </select>
+                                </div>
+
+                        </div>
+
+
+
+                        <div class="container">
+
+                                <div class="mb-3">
+                                    <label>Rota:</label>
+                                    <select name="genderxzc" id="genderxz" class="form-control form-control-lg">
+                                        <option value="Ativado">Ativado</option>
+                                        <option value="Desativado">Desativado</option>
+                                    </select>
+                                </div>
+
+                        </div>
+
+
+
+                        <div class="container">
+                            <label>Local:</label>
+                            <div class="mb-3">                           
+                                    <input type="text" name="autocomplete_searchzzz" id="autocomplete_search" class="form-control form-control-lg" placeholder="Digite o nome da rota aqui" />
+                                    <span id="search_result"></span>
+                            </div>
+                
+
+                        </div>
+                        <div class="col text-center">
+                            <div class="mb-3">
+                                <input type="submit" name="submit_button" class="btn btn-primary" value="Salvar" />
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                
+            </div>
+
+            <% } else if(action == 'edit') { %>
+            <div class="card">
+                <div class="card-header">Edição de Dados</div>
+                <div class="card-body">
+                    <form method="POST" action="/presenca/edit/<%= sampleData.id %>">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label>NOME DA ROTA</label>
+                                    <input type="text" name="first_name" id="first_name" class="form-control" value="<%= sampleData.first_name %>" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label>CÓDIGO DA ROTA</label>
+                                    <input type="number" name="age" id="age" class="form-control" value="<%= sampleData.age %>" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label>ESTADO DA ROTA</label>
+                                    <select name="gender" id="gender" class="form-control">
+                                        <option value="Ativado">Ativado</option>
+                                        <option value="Desativado">Desativado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="submit" name="submit_button" class="btn btn-primary" value="SALVAR ALTERAÇÕES" />
+                        </div>
+                    </form>
+                    <script>
+                    document.getElementById('gender').value="<%= sampleData.gender %>";
+                    </script>
+                </div>
+            </div>
+
+            <% } else { %>
+                <%if(message.length > 0) {%>
+                <div class="alert alert-success">
+                    <%=message%>
+                </div>
+                <%}%>
+            <div class="imgz">
+                <img src="http://localhost:3000/images/fpsiconvan.png" class="rounded mx-auto d-block" height="125" width="125" alt="zzz">
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col">Lista de matricula</div>
+                        <div class="col">
+                            <a href="/presenca/add" class="btn btn-success btn-sm float-end">Criar Nova Rota</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Nome da Rota</th>
+                                <th>Código da Rota</th>
+                                <th>Estado da rota</th>
+                                <th>Ações</th>
+                            </tr>
+                            <%
+                            if(sampleData.length > 0)
+                            {
+                                sampleData.forEach(function(data){
+                            %>
+                            <tr>
+                                <td><%= data.first_name %></td>
+                                <td><%= data.age %></td>
+                                <td><%= data.gender %></td>
+                                <td>
+                                    <a href="/presenca/edit/<%= data.id %>" class="btn btn-primary btn-sm">Editar</a>
+                                    <a href="/presenca/delete/<%= data.id %>" class="btn btn-danger btn-sm">Deletar</a>
+                                </td>
+                            </tr>
+                            <%
+                                });
+                            }
+                            else
+                            {
+                            %>
+                            <tr>
+                                <td colspan="5">Nenhum dado Encontrado</td>
+                            </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <% } %>
+
+        </div> 
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script>
+
+            function load_data(query = '')
+            {
+                fetch('/get_data?search_query='+query+'').then(function(response){
+        
+                    return response.json();
+        
+                }).then(function(responseData){
+        
+                    var html = '<ul class="list-group">';
+        
+                    if(responseData.length > 0)
+                    {
+                        for(var count = 0; count < responseData.length; count++)
+                        {
+                            var regular_expression = new RegExp('('+query+')', 'gi');
+        
+                            html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">'+responseData[count].country_name.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>')+'</a>';
+                        }
+                    }
+                    else
+                    {
+                        html += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
+                    }
+        
+                    html += '</ul>';
+        
+                    document.getElementById('search_result').innerHTML = html;
+        
+                });
+            }
+        
+            var search_element = document.getElementById("autocomplete_search");
+        
+            search_element.onkeyup = function(){
+        
+                var query = search_element.value;
+        
+                load_data(query);
+        
+            };
+        
+            search_element.onfocus = function(){
+        
+                var query = search_element.value;
+        
+                load_data(query);
+        
+            };
+        
+            function get_text(event)
+            {
+                var country_name = event.textContent;
+        
+                console.log(country_name);
+        
+                document.getElementById('autocomplete_search').value = country_name;
+        
+                document.getElementById('search_result').innerHTML = '';
+            }
+        
+        </script>
+    </body>
+</html>
