@@ -28,12 +28,26 @@ router.get("/", function(request, response, next){
 ///############################## Adicionar locais ############################## 
 
 router.get("/add", function(request, response, next){
-	var id = 1
+	var id = 2
 
 	var query = `SELECT * FROM dadosSalvos WHERE id = "${id}"`;
 
 	database.query(query, function(error, data){
 		response.render("caderneta", {title:'PAP caderneta-INSERIR DADOS', action:'add',sampleData:data[0]});
+	});
+    
+
+});
+
+router.get("/add/:id", function(request, response, next){
+	
+	var id = request.params.id;
+	var query = `SELECT * FROM dadosSalvos WHERE id = "${id}"`;
+	console.log('add id')
+
+	console.log(request.body)
+	database.query(query, function(error, data){
+		response.render("caderneta", {title:'PAP caderneta-INSERIR DADOS', action:'add2',sampleData:data[0]});
 	});
     
 
