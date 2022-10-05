@@ -16,7 +16,7 @@ router.get("/", function(request, response, next){
 		}
 		else
 		{
-			response.render('caderneta', {title:'PAP-caderneta', action:'list', sampleData:data, message:request.flash('success')});
+			response.render('caderneta', {title:'PAP-caderneta', action:'list', sampleData:data});
 		}
 
 	});
@@ -43,13 +43,26 @@ router.get("/add/:id", function(request, response, next){
 	
 	var id = request.params.id;
 	var query = `SELECT * FROM dadosSalvos WHERE id = "${id}"`;
-	console.log('add id')
+	console.log('add id',id)
 
 	console.log(request.body)
+
+
 	database.query(query, function(error, data){
-		response.render("caderneta", {title:'PAP caderneta-INSERIR DADOS', action:'add2',sampleData:data[0]});
+		console.log(data.length===0,data.length)
+		if (data.length===0){
+
+			response.redirect("/caderneta/add");
+
+		}else{
+			
+			console.log('n deu bronca', data)
+			response.render("caderneta", {title:'PAP caderneta-INSERIR DADOS', action:'add2',sampleData:data[0]});
+
+		}
 	});
-    
+
+
 
 });
 
