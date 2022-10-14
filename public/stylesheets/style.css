@@ -4,7 +4,7 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #398c36;
 }
 
 img{
@@ -14,3 +14,13 @@ img{
   width: 250px;
   height: 250px;
 }
+
+.nav.navbar-nav li a {
+  color: #fff !important; 
+}
+.nav .navbar-nav li a:hover { 
+  color: grey !important;
+}
+
+.black-background {background-color:#000000;}
+.white {color:#ffffff;}

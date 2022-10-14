@@ -6,17 +6,22 @@ var database = require('../database');
 
 router.get("/", function(request, response, next){
 
-	var query = "SELECT * FROM sample_data ORDER BY id DESC";
+	var query = "SELECT * FROM PAP_Locais";
 
 	database.query(query, function(error, data){
-
+		console.log('------------------------- 1 ° console --- ',data)
+		var cafe= 'asadasd'
 		if(error)
 		{
 			throw error; 
 		}
 		else
 		{
-			response.render('locais', {title:'PAP-Locais', action:'list', sampleData:data, message:request.flash('success')});
+			var objdata = data.recordset
+			//console.log('#############################',data)
+			console.log("AKI AKI AKI AKI/*////////////////////////////////",typeof(objdata),objdata.length,"$$$$$$",objdata)
+			response.render('locais', {title:'PAP-Locais zz', action:'list', sampleData:objdata, message:request.flash('success')});
+
 		}
 
 	});
@@ -44,9 +49,9 @@ router.post("/add_sample_data", function(request, response, next){
 	var gender = request.body.gender;
 
 	var query = `
-	INSERT INTO sample_data 
-	(first_name, last_name, age, gender) 
-	VALUES ("${first_name}", "${last_name}", "${age}", "${gender}")
+	INSERT INTO PAP_Locais 
+	(Local, Rota, Em_Atividade)
+	VALUES ('${first_name}', '${age}', '${gender}')
 	`;
 
 	database.query(query, function(error, data){
@@ -69,14 +74,14 @@ router.post("/add_sample_data", function(request, response, next){
 ///############################## Editar Locais ############################## 
 
 router.get('/edit/:id', function(request, response, next){
-
 	var id = request.params.id;
 
-	var query = `SELECT * FROM sample_data WHERE id = "${id}"`;
+	var query = `SELECT * FROM PAP_Locais WHERE Local = '${id}'`;
 
 	database.query(query, function(error, data){
+		var objdata = data.recordset
 
-		response.render('locais', {title: 'PAP LOCAIS - EDIT', action:'edit', sampleData:data[0]});
+		response.render('locais', {title: 'PAP LOCAIS - EDIT', action:'edit', sampleData:objdata[0]});
 
 	});
 
@@ -127,7 +132,7 @@ router.get('/delete/:id', function(request, response, next){
 	var id = request.params.id; 
 
 	var query = `
-	DELETE FROM sample_data WHERE id = "${id}"
+	DELETE FROM PAP_Locais WHERE Local = '${id}'
 	`;
 
 	database.query(query, function(error, data){

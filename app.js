@@ -12,6 +12,7 @@ var locaisRouter = require('./routes/locais');
 var presencaRouter = require('./routes/presenca');
 var sampledataRouter = require('./routes/sample_data');
 var cadernetaRouter = require('./routes/caderneta');
+var protocoloRouter = require('./routes/protocolo');
 
 var app = express();
 
@@ -42,6 +43,7 @@ app.use('/locais', locaisRouter);
 app.use('/presenca', presencaRouter);
 app.use('/sample_data', sampledataRouter);
 app.use('/caderneta', cadernetaRouter);
+app.use('/protocolo', protocoloRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

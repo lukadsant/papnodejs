@@ -6,7 +6,7 @@ var database = require('../database');
 
 router.get("/", function(request, response, next){
 
-	var query = "SELECT * FROM dadosSalvos ORDER BY id DESC";
+	var query = "SELECT * FROM PAP_DadosSalvos_primary ORDER BY id DESC";
 
 	database.query(query, function(error, data){
 
@@ -15,8 +15,9 @@ router.get("/", function(request, response, next){
 			throw error; 
 		}
 		else
-		{
-			response.render('caderneta', {title:'PAP-caderneta', action:'list', sampleData:data});
+		{	
+			var objdata = data.recordset
+			response.render('caderneta', {title:'PAP-caderneta', action:'list', sampleData:objdata});
 		}
 
 	});
@@ -28,12 +29,15 @@ router.get("/", function(request, response, next){
 ///############################## Adicionar locais ############################## 
 
 router.get("/add", function(request, response, next){
-	var id = 2
+	var id = 1
 
-	var query = `SELECT * FROM dadosSalvos WHERE id = "${id}"`;
+	var query = `SELECT * FROM PAP_CadernetaDadosSalvos_primary WHERE id = '${id}'`;
 
 	database.query(query, function(error, data){
-		response.render("caderneta", {title:'PAP caderneta-INSERIR DADOS', action:'add',sampleData:data[0]});
+		var objdata = data.recordset
+
+		response.render("caderneta", {title:'PAP-Caderneta', action:'add', sampleData:objdata[0]});
+		//console.log(data)
 	});
     
 
@@ -42,22 +46,28 @@ router.get("/add", function(request, response, next){
 router.get("/add/:id", function(request, response, next){
 	
 	var id = request.params.id;
-	var query = `SELECT * FROM dadosSalvos WHERE id = "${id}"`;
+	var query = `SELECT * FROM PAP_CadernetaDadosSalvos_primary WHERE id = '${id}'`;
+
 	console.log('add id',id)
 
-	console.log(request.body)
+	//console.log(request.body)
 
 
 	database.query(query, function(error, data){
-		console.log(data.length===0,data.length)
-		if (data.length===0){
+		//console.log(data.length===0,data.length)
+		var objdata = data.recordset
+
+		console.log(objdata.length==0,objdata.length)
+		console.log('OBJDATA',objdata)
+
+		if (objdata.length==0){
 
 			response.redirect("/caderneta/add");
 
 		}else{
 			
-			console.log('n deu bronca', data)
-			response.render("caderneta", {title:'PAP caderneta-INSERIR DADOS', action:'add2',sampleData:data[0]});
+			console.log('n deu bronca', objdata)
+			response.render("caderneta", {title:'PAP-Caderneta', action:'add2',sampleData:objdata[0]});
 
 		}
 	});
@@ -79,12 +89,14 @@ router.post("/add_sample_data", function(request, response, next){
 
 	var periodo = "2"
 	var cur='MED'
-	var rec = "27/09/2022"
+	let date = new Date()
+	console.log('card',date.toLocaleString())
+	var rec = date.toLocaleString()
 
 	var query = `
-	INSERT INTO dadosSalvos 
-	(matricula, estudante, local, curso, periodo, turno, Recebimento) 
-	VALUES ("${first_name}", "${last_name}", "${gender}","${cur}", "${periodo}", "${age}","${rec}")
+	INSERT INTO PAP_CadernetaDadosSalvos_primary 
+	(Matricula, Estudante, Local, Periodo, Protocolo, Assinatura,Data) 
+	VALUES ('${first_name}', '${last_name}', '${gender}','${cur}', '${periodo}', '${age}','${rec}') 
 	`;
 
 	database.query(query, function(error, data){
@@ -110,11 +122,11 @@ router.get('/edit/:id', function(request, response, next){
 
 	var id = request.params.id;
 
-	var query = `SELECT * FROM dadosSalvos WHERE id = "${id}"`;
+	var query = `SELECT * FROM PAP_DadosSalvos_primary WHERE id = "${id}"`;
 
 	database.query(query, function(error, data){
 
-		response.render('caderneta', {title: 'PAP caderneta - EDIT', action:'edit', sampleData:data[0]});
+		response.render('caderneta', {title: 'PAP-Caderneta', action:'edit', sampleData:data[0]});
 
 	});
 
@@ -133,7 +145,7 @@ router.post('/edit/:id', function(request, response, next){
 	var gender = request.body.gender;
 
 	var query = `
-	UPDATE dadosSalvos 
+	UPDATE PAP_DadosSalvos_primary 
 	SET first_name = "${first_name}", 
 	last_name = "${last_name}", 
 	age = "${age}", 
@@ -163,7 +175,7 @@ router.get('/delete/:id', function(request, response, next){
 	var id = request.params.id; 
 
 	var query = `
-	DELETE FROM dadosSalvos WHERE id = "${id}"
+	DELETE FROM PAP_DadosSalvos_primary WHERE id = "${id}"
 	`;
 
 	database.query(query, function(error, data){

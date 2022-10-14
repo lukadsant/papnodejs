@@ -6,10 +6,27 @@ var database = require('../database');
 
 router.get("/", function(request, response, next){
 
-	var query = "SELECT * FROM dadosSalvos ORDER BY id DESC";
-
+	//var query = "SELECT * FROM PAP_Users";
+    const query = "SELECT * FROM PAP_Locais";
+    
+    //database.connect().then((result) =>{
+    //    if (result.connecting){
+    //        console.log('con...')
+    //    }
+    //    if (result.connected){
+    //        result.request().query(query,(err,result)=>{
+    //            if (err){
+    //                console.log('hata',err)
+    //
+    //            }
+    //            console.log('result',result)
+	//			response.render('presenca', {title:'PAP-presenca', action:'list', sampleData:data, message:request.flash('success')});
+    //        })
+    //        console.log('conected')
+    //    }
+    //})
 	database.query(query, function(error, data){
-
+		console.log('###############',data)
 		if(error)
 		{
 			throw error; 
@@ -29,7 +46,7 @@ router.get("/", function(request, response, next){
 
 router.get("/add", function(request, response, next){
 
-	response.render("presenca", {title:'PAP presenca-INSERIR DADOS', action:'add'});
+	response.render("presenca", {title:'PAP-Presenças', action:'add'});
     
 
 });
@@ -39,20 +56,20 @@ router.post("/add_sample_data", function(request, response, next){
 
 	var first_name = request.body.first_name;
 
-	var last_name = "lucas"
+	var last_name = 'lucas'
 
 	var age = request.body.age;
 
 	var gender = request.body.autocomplete_searchzzz;
 
-	var periodo = "2"
+	var periodo = '2'
 	var cur='MED'
-	var rec = "27/09/2022"
+	var rec = '27/09/2022'
 
 	var query = `
-	INSERT INTO dadosSalvos 
-	(matricula, estudante, local, curso, periodo, turno, Recebimento) 
-	VALUES ("${first_name}", "${last_name}", "${gender}","${cur}", "${periodo}", "${age}","${rec}")
+	INSERT INTO PAP_DadosSalvos_primary 
+	(Matricula, Estudante, Local, Curso, Periodo, Turno, Recebimento) 
+	VALUES ('${first_name}', '${last_name}', '${gender}','${cur}', '${periodo}', '${age}','${rec}')
 	`;
 
 	database.query(query, function(error, data){
@@ -78,7 +95,7 @@ router.get('/edit/:id', function(request, response, next){
 
 	var id = request.params.id;
 
-	var query = `SELECT * FROM dadosSalvos WHERE id = "${id}"`;
+	var query = `SELECT * FROM PAP_DadosSalvos_primary WHERE id = "${id}"`;
 
 	database.query(query, function(error, data){
 
@@ -101,7 +118,7 @@ router.post('/edit/:id', function(request, response, next){
 	var gender = request.body.gender;
 
 	var query = `
-	UPDATE dadosSalvos 
+	UPDATE PAP_DadosSalvos_primary 
 	SET first_name = "${first_name}", 
 	last_name = "${last_name}", 
 	age = "${age}", 
@@ -131,7 +148,7 @@ router.get('/delete/:id', function(request, response, next){
 	var id = request.params.id; 
 
 	var query = `
-	DELETE FROM dadosSalvos WHERE id = "${id}"
+	DELETE FROM PAP_DadosSalvos_primary WHERE id = "${id}"
 	`;
 
 	database.query(query, function(error, data){
