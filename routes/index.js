@@ -16,15 +16,11 @@ router.get('/get_data', function(request, response, next){
 
     var search_query = request.query.search_query;
 
-    var query = `
-    SELECT country_name FROM apps_countries 
-    WHERE country_name LIKE '%${search_query}%' 
-    LIMIT 10
-    `;
+    var query = `SELECT TOP 5 country_name FROM apps_countries WHERE country_name LIKE '%${search_query}%'`;
 
     database.query(query, function(error, data){
         console.log(data)
-        response.json(data);
+        response.json(data.recordset);
 
     });
 

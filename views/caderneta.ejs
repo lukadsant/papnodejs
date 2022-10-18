@@ -331,10 +331,9 @@
             //});
         </script>
         <script>
-            var code=0
-            
+
             function load_data(query = '')
-            {   
+            {
                 fetch('/get_data?search_query='+query+'').then(function(response){
         
                     return response.json();
@@ -348,15 +347,13 @@
                         for(var count = 0; count < responseData.length; count++)
                         {
                             var regular_expression = new RegExp('('+query+')', 'gi');
-                            code= responseData[count].Rota
-                            html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this,code)">'+responseData[count].Local.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>')+"--"+code+'</a>';
-                            console.log('teste',responseData[count].Local,responseData[count].Rota)
-
+        
+                            html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">'+responseData[count].country_name.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>')+'</a>';
                         }
                     }
                     else
                     {
-                        html += '<a href="#" class="list-group-item list-group-item-action disabled">Nenhum Local Encontrado</a>';
+                        html += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
                     }
         
                     html += '</ul>';
@@ -384,18 +381,14 @@
         
             };
         
-            function get_text(event,var2)
-            {   
-                console.log('comparation var2 vs code',var2,'-',code)
-                var Local = event.textContent;
-                var Rota=var2
-                console.log('baco',Local,Rota);
+            function get_text(event)
+            {
+                var country_name = event.textContent;
         
-                document.getElementById('autocomplete_search').value = Local;      
-                document.getElementById('recipient-nrota').value = code;      
-
-
-
+                console.log(country_name);
+        
+                document.getElementById('autocomplete_search').value = country_name;
+        
                 document.getElementById('search_result').innerHTML = '';
             }
         
