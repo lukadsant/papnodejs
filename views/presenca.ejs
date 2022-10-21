@@ -91,6 +91,51 @@
                                 <input type="submit" name="submit_button" class="btn btn-success" value="Salvar" />
                             </div>
                         </div>
+                        <div class="col text-center">
+                            <button type="submit" id="submit" class="btn btn-success" >SALVAR DADOS</button>  
+                        </div> 
+
+                        <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                <button type="button" class="close" onclick="$('#exampleModal').modal('hide')" aria-label="Close" >
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Estudante:</label>
+                                    <input type="text" name="namename" class="form-control" id="recipient-name" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Turno: </label>
+                                    <textarea class="form-control" name="cursoname" id="message-text"  readonly></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-rota" class="col-form-label">Rota:</label>
+                                    <input type="text" name="rotaname"class="form-control" id="recipient-rota" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-nrota" class="col-form-label">Número de rota:</label>
+                                    <input type="text" name="nrotaname" class="form-control" id="recipient-nrota" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="recipient-per" class="col-form-label">Periodo:</label>
+                                    <input type="text" name="pername" class="form-control" id="recipient-per" readonly>
+                                </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" onclick="$('#exampleModal').modal('hide');">Editar</button>
+                                <input type="submit" name="submit_button" class="btn btn-success" value="Salvar" />
+                            </div>
+                            </div>
+                        </div>
+                        </div>    
                     </form>
 
                 </div>
@@ -201,7 +246,47 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script>
+            code=0
 
+            $(function () {
+                $('#submit').click(function (e) {
+                    e.preventDefault();
+                    var value = document.getElementById('autocomplete_search').value.length
+                    console.log('value lenght',document.getElementById('autocomplete_search').value.length)
+                    if (value!=0) {
+                        console.log('deuif')
+                        $("#exampleModal").modal('show');
+                    }else{
+                        console.log('deu else')
+                        document.getElementById("autocomplete_search").focus();
+
+                        
+                    }
+                });
+            });
+
+
+            $('#exampleModal').on('show.bs.modal', function (event) {
+                console.log('modal')
+                periodovar="0"
+
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var recipient = button.data('whatever') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this)
+                modal.find('.modal-title').text('Confirme as informações de recebimeto ')
+                modal.find('.modal-body textarea').val(document.getElementById('age').value)
+                modal.find('.modal-body input').val(document.getElementById('autocomplete_search').value)
+                modal.find('.modal-body #recipient-rota').val(document.getElementById('autocomplete_search').value.toUpperCase())
+                modal.find('.modal-body #recipient-nrota').val(rr)
+                modal.find('.modal-body #recipient-per').val("zz")
+            })
+            
+
+        </script>
+        <script>
+            rr=0800
             function load_data(query = '')
             {
                 fetch('/get_data?search_query='+query+'').then(function(response){
@@ -218,7 +303,7 @@
                         {
                             var regular_expression = new RegExp('('+query+')', 'gi');
         
-                            html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">'+responseData[count].country_name.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>')+'</a>';
+                            html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">'+responseData[count].Local.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>',rr=responseData[count].Rota)+'</a>';
                         }
                     }
                     else
@@ -253,11 +338,11 @@
         
             function get_text(event)
             {
-                var country_name = event.textContent;
+                var Local = event.textContent;
         
-                console.log(country_name);
+                console.log(Local);
         
-                document.getElementById('autocomplete_search').value = country_name;
+                document.getElementById('autocomplete_search').value = Local;
         
                 document.getElementById('search_result').innerHTML = '';
             }

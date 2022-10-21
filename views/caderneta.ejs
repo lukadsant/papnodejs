@@ -94,7 +94,7 @@
     
                                     <div class="mb-3">
                                         <label>Matrícula:</label>
-                                        <input type="number" name="first_name" id="first_name" class="form-control form-control-lg" value='<%= sampleData.id %>' readonly />
+                                        <input type="number" name="first_name" id="first_name" class="form-control form-control-lg" value='<%= sampleData.CPF %>'  readonly />
                                     </div>
     
                             </div>
@@ -130,19 +130,24 @@
                                     <form>
                                       <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Matrícula:</label>
-                                        <input type="text" class="form-control" id="recipient-name" readonly>
+                                        <input type="text" name="namename" class="form-control" id="recipient-name" readonly>
                                       </div>
+
                                       <div class="form-group">
                                         <label for="recipient-rota" class="col-form-label">Rota:</label>
-                                        <input type="text" class="form-control" id="recipient-rota" readonly>
+                                        <input type="text" name="rotaname"class="form-control" id="recipient-rota" readonly>
                                       </div>
                                       <div class="form-group">
                                         <label for="recipient-nrota" class="col-form-label">Número de rota:</label>
-                                        <input type="text" class="form-control" id="recipient-nrota" readonly>
+                                        <input type="text" name="nrotaname" class="form-control" id="recipient-nrota" readonly>
                                       </div>
                                       <div class="form-group">
                                         <label for="message-text" class="col-form-label">Curso do aluno: </label>
-                                        <textarea class="form-control" id="message-text" readonly></textarea>
+                                        <textarea class="form-control" name="cursoname" id="message-text"  readonly></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="recipient-per" class="col-form-label">Periodo:</label>
+                                        <input type="text" name="pername" class="form-control" id="recipient-per" readonly>
                                       </div>
                                     </form>
                                   </div>
@@ -263,75 +268,48 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script>
+            code=0
+            console.log("<%= sampleData.estudante %>")
             $(function () {
                 $('#submit').click(function (e) {
                     e.preventDefault();
                     var value = document.getElementById('autocomplete_search').value.length
+                    console.log('value lenght',document.getElementById('autocomplete_search').value.length)
                     if (value!=0) {
+                        console.log('deuif')
                         $("#exampleModal").modal('show');
                     }else{
+                        console.log('deu else')
                         document.getElementById("autocomplete_search").focus();
 
                         
                     }
                 });
             });
-           // if (document.getElementById('autocomplete_search').value.length==0){
-           //     console.log(document.getElementById('autocomplete_search').value.length)
-           //     console.log('zero')
-           // }else{
-           //     console.log('###um')
-           // 
-//
+
+
             $('#exampleModal').on('show.bs.modal', function (event) {
                 console.log('modal')
+                periodovar="<%= sampleData.PERIODO %>"
+
                 var button = $(event.relatedTarget) // Button that triggered the modal
                 var recipient = button.data('whatever') // Extract info from data-* attributes
                 // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
                 // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
                 var modal = $(this)
                 modal.find('.modal-title').text('Confirme as informações de recebimeto ')
-                modal.find('.modal-body input').val("<%= sampleData.id %>"+" - "+"<%= sampleData.estudante %>")
-                modal.find('.modal-body textarea').val("<%= sampleData.curso %>")
-                modal.find('.modal-body #recipient-rota').val(document.getElementById('autocomplete_search').value)
-                modal.find('.modal-body #recipient-nrota').val(code)
+                modal.find('.modal-body input').val("<%= sampleData.NOME %>")
+                modal.find('.modal-body textarea').val("<%= sampleData.CURSO %>")
+                modal.find('.modal-body #recipient-rota').val(document.getElementById('autocomplete_search').value.toUpperCase())
+                modal.find('.modal-body #recipient-nrota').val(rr)
+                modal.find('.modal-body #recipient-per').val("<%= sampleData.PERIODO %>")
             })
             
 
-            //var response = "12";
-            //if (response == "success") {
-            //
-            //  $('#eventCreated').modal('show');
-            //
-            //}
-            
-            /////////////$("button").click(function(){
-            ///////////// var response = document.getElementById('autocomplete_search').value.length;
-            ///////////// if (response!=0) {
-            
-             /////////////  $('#eventCreated').modal('show');
-
-              
-           //     $('#exampleModal').on('show.bs.modal', function (event) {
-           //         console.log('modal')
-           //         var button = $(event.relatedTarget) // Button that triggered the modal
-           //         var recipient = button.data('whatever') // Extract info from data-* attributes
-           //         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-           //         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-           //         var modal = $(this)
-           //         modal.find('.modal-title').text('Confirme as informações de recebimeto' + recipient)
-           //         modal.find('.modal-body input').val("<%= sampleData.estudante %>")
-           //         modal.find('.modal-body textarea').val("<%= sampleData.curso %>")
-           //         modal.find('.modal-body #recipient-rota').val(document.getElementById('autocomplete_search').value)
-           //         modal.find('.modal-body #recipient-nrota').val(code)
-           //     })
-           // }
-
-            //}
-            //});
         </script>
         <script>
-
+            rotasnumber=0
+            rr=0800
             function load_data(query = '')
             {
                 fetch('/get_data?search_query='+query+'').then(function(response){
@@ -341,28 +319,33 @@
                 }).then(function(responseData){
         
                     var html = '<ul class="list-group">';
-        
+                    console.log("%%%%%%%%%%%%",responseData)
                     if(responseData.length > 0)
                     {
                         for(var count = 0; count < responseData.length; count++)
                         {
                             var regular_expression = new RegExp('('+query+')', 'gi');
-        
-                            html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">'+responseData[count].country_name.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>')+'</a>';
+                            
+                            rotasnumber=responseData
+                            html += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this,rotasnumber)">'+responseData[count].Local.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>',rr=responseData[count].Rota)+'</a>';
+                            //html2 += '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">'+responseData[count].Rota.replace(regular_expression, '<span class="text-primary fw-bold">$1</span>')+'</a>';
                         }
                     }
                     else
                     {
                         html += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
+                        //html2 += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
                     }
         
                     html += '</ul>';
         
                     document.getElementById('search_result').innerHTML = html;
+   
         
                 });
             }
-        
+
+
             var search_element = document.getElementById("autocomplete_search");
         
             search_element.onkeyup = function(){
@@ -381,13 +364,17 @@
         
             };
         
-            function get_text(event)
+            function get_text(event,rotasnumber)
             {
-                var country_name = event.textContent;
+          
+                var Local = event.textContent;
         
-                console.log(country_name);
+                console.log(Local);
         
-                document.getElementById('autocomplete_search').value = country_name;
+                document.getElementById('autocomplete_search').value = Local;
+                document.getElementById("autocomplete_search").focus();
+                //console.log("&&&&&&&&&&gettext",rotasnumber[i])
+                //console.log(rr)
         
                 document.getElementById('search_result').innerHTML = '';
             }

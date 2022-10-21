@@ -3,6 +3,7 @@ var router = express.Router();
 
 /* GET users listing. */
 var database = require('../database');
+var database2 = require('../database2');
 
 router.get("/", function(request, response, next){
 
@@ -29,11 +30,13 @@ router.get("/", function(request, response, next){
 ///############################## Adicionar locais ############################## 
 
 router.get("/add", function(request, response, next){
-	var id = 1
+	var id = '2020202013'
 
-	var query = `SELECT * FROM PAP_CadernetaDadosSalvos_primary WHERE id = '${id}'`;
+	var query = `SELECT * FROM SEC0013_ALUNOS_MATRICULADOS_GERAL WHERE MATRÍCULA = '${id}'`;
 
-	database.query(query, function(error, data){
+	database2.query(query, function(error, data){
+		console.log(data)
+
 		var objdata = data.recordset
 
 		response.render("caderneta", {title:'PAP-Caderneta', action:'add', sampleData:objdata[0]});
@@ -46,19 +49,20 @@ router.get("/add", function(request, response, next){
 router.get("/add/:id", function(request, response, next){
 	
 	var id = request.params.id;
-	var query = `SELECT * FROM PAP_CadernetaDadosSalvos_primary WHERE id = '${id}'`;
+	var query = `SELECT * FROM SEC0013_ALUNOS_MATRICULADOS_GERAL WHERE MATRÍCULA = '${id}'`;
 
 	console.log('add id',id)
 
 	//console.log(request.body)
 
 
-	database.query(query, function(error, data){
+	database2.query(query, function(error, data){
 		//console.log(data.length===0,data.length)
 		var objdata = data.recordset
 
 		console.log(objdata.length==0,objdata.length)
 		console.log('OBJDATA',objdata)
+		console.log('chegando 0',objdata[0])
 
 		if (objdata.length==0){
 
@@ -81,14 +85,14 @@ router.post("/add_sample_data", function(request, response, next){
 
 	var first_name = request.body.first_name;
 
-	var last_name = "lucas"
+	var last_name = request.body.namename;
 
 	var age = request.body.age;
 
-	var gender = request.body.autocomplete_searchzzz;
+	var local = request.body.autocomplete_search_name;
 
-	var periodo = "2"
-	var cur='MED'
+	var periodo = request.body.pername;
+	var cur=request.body.cursoname;
 	let date = new Date()
 	console.log('card',date.toLocaleString())
 	var rec = date.toLocaleString()
@@ -96,7 +100,7 @@ router.post("/add_sample_data", function(request, response, next){
 	var query = `
 	INSERT INTO PAP_CadernetaDadosSalvos_primary 
 	(Matricula, Estudante, Local, Periodo, Protocolo, Assinatura,Data) 
-	VALUES ('${first_name}', '${last_name}', '${gender}','${cur}', '${periodo}', '${age}','${rec}') 
+	VALUES ('${first_name}', '${last_name}', '${local}','${periodo}', '${cur}', '${age}','${rec}') 
 	`;
 
 	database.query(query, function(error, data){

@@ -16,7 +16,7 @@ router.get('/get_data', function(request, response, next){
 
     var search_query = request.query.search_query;
 
-    var query = `SELECT TOP 5 country_name FROM apps_countries WHERE country_name LIKE '%${search_query}%'`;
+    var query = `SELECT TOP 5 * FROM PAP_Locais WHERE Local LIKE '%${search_query}%'`;
 
     database.query(query, function(error, data){
         console.log(data)
